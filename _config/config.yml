@@ -1,0 +1,6 @@
+---
+Name: nswdpc-elemental-blog
+---
+NSWDPC\Elemental\Models\Blog\ElementBlog:
+  extensions:
+    - 'NSWDPC\GridHelper\Extensions\ElementChildGridExtension'

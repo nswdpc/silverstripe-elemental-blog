@@ -1,0 +1,42 @@
+{
+    "name": "nswdpc/silverstripe-elemental-blog",
+    "description": "Element to show blog content.",
+    "type": "silverstripe-vendormodule",
+    "keywords": [
+        "silverstripe",
+        "nsw",
+        "module",
+        "blog"
+    ],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Mark Taylor",
+            "homepage": "https://dpc.nsw.gov.au",
+            "role": "Bon Vivant"
+        },
+        {
+            "name": "James Ellis",
+            "homepage": "https://dpc.nsw.gov.au",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "silverstripe/blog": "^3.0",
+        "dnadesign/silverstripe-elemental": "^4.0",
+        "nswdpc/silverstripe-grid-helpers": "^0.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "NSWDPC\\Elemental\\Models\\Blog\\Tests\\": [
+                "tests/"
+            ],
+            "NSWDPC\\Elemental\\Models\\Blog\\": [
+                "src/Models/Elements/"
+            ]
+        }
+    }
+}
