@@ -22,7 +22,7 @@
     "require": {
         "silverstripe/blog": "^3.0",
         "dnadesign/silverstripe-elemental": "^4.0",
-        "nswdpc/silverstripe-grid-helpers": "^0.2"
+        "nswdpc/silverstripe-grid-helpers": "<1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
