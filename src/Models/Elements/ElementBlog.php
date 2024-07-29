@@ -52,6 +52,7 @@ class ElementBlog extends BaseElement {
      * @inheritdoc
      */
     private static $db = [
+        'HTML' => 'HTMLText',
         'NumberOfPosts' => 'Int',
         'BlogLinkTitle' => 'Varchar(255)'
     ];
@@ -86,6 +87,11 @@ class ElementBlog extends BaseElement {
     {
         $this->beforeUpdateCMSFields(
             function($fields) {
+
+                /** @var HTMLEditorField $editorField */
+                $editorField = $fields->fieldByName('Root.Main.HTML');
+                $editorField->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'));
+
                 $fields->removeByName(['BlogID','TagID']);
                 $tags = BlogTag::get()->map('ID', 'Title');
                 $fields->addFieldsToTab(
