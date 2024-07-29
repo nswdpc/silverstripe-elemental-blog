@@ -102,7 +102,7 @@ class ElementBlog extends BaseElement {
                             'BlogLinkTitle',
                             _t(
                                 __CLASS__ . '.LINKTITLE',
-                                'Blog link title'
+                                'Title for link to view the blog selected'
                             )
                         ),
                         DropdownField::create(
