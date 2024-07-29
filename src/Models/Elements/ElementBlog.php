@@ -84,46 +84,54 @@ class ElementBlog extends BaseElement {
      */
     public function getCMSFields()
     {
-        $this->beforeUpdateCMSFields(function($fields)
-        {
+        $this->beforeUpdateCMSFields(
+            function($fields) {
                 $fields->removeByName(['BlogID','TagID']);
-
                 $tags = BlogTag::get()->map('ID', 'Title');
-
                 $fields->addFieldsToTab(
                     'Root.Main', [
                         DropdownField::create(
                             'BlogID',
                             _t(
-                                __CLASS__ . '.HOLDER_ID', 'Choose a blog'
+                                __CLASS__ . '.HOLDER_ID',
+                                'Choose a blog'
                             ),
                             $this->getBlogs()
                         )->setEmptyString('Choose an option'),
                         TextField::create(
                             'BlogLinkTitle',
                             _t(
-                                __CLASS__ . '.LINKTITLE', 'Blog link title'
+                                __CLASS__ . '.LINKTITLE',
+                                'Blog link title'
                             )
                         ),
                         DropdownField::create(
                             'TagID',
                             'Tag',
-                            $tags
-                        )->setEmptyString('Choose an option'),
+                            $tags ?? []
+                        )->setEmptyString(
+                            _t(
+                                __CLASS__ . '.CHOOSE_AN_OPTION',
+                                'Choose an option'
+                            )
+                        ),
                         NumericField::create(
                             'NumberOfPosts',
                             _t(
-                                __CLASS__ . '.POSTS', 'Number of Posts'
+                                __CLASS__ . '.POSTS',
+                                'Number of Posts'
                             )
                         )->setDescription(
                             _t(
-                                __CLASS__ . '.POSTS_DESCRIPTION', 'Setting this value to zero will return all matching posts'
+                                __CLASS__ . '.POSTS_DESCRIPTION',
+                                'Setting this value to zero will return all matching posts'
                             )
                         )
                     ]
                 );
 
-            });
+            }
+        );
         return parent::getCMSFields();
     }
 
@@ -151,22 +159,20 @@ class ElementBlog extends BaseElement {
         if(!$blog || !$blog->exists()) {
             return null;
         }
-
-        $blogPosts = BlogPost::get()->sort('PublishDate', 'DESC')->filter([
-            'ParentID' => $blog->ID
-        ]);
-
+        $blogPosts = BlogPost::get()
+            ->sort('PublishDate', 'DESC')
+            ->filter([
+                'ParentID' => $blog->ID
+            ]);
         $tag = $this->Tag();
         if($tag && $tag->exists() && $tag->Title) {
             $blogPosts = $blogPosts->filter([
                 'Tags.Title' => $tag->Title
             ]);
         }
-
         if ($blogPosts && $this->NumberOfPosts > 0) {
             $blogPosts = $blogPosts->limit($this->NumberOfPosts);
         }
-
         return $blogPosts;
     }
 
