@@ -173,7 +173,7 @@ class ElementBlog extends BaseElement {
         $tag = $this->Tag();
         if($tag && $tag->exists() && $tag->Title) {
             $blogPosts = $blogPosts->filter([
-                'Tags.Title' => $tag->Title
+                'Tags.ID' => $tag->ID
             ]);
         }
         if ($blogPosts && $this->NumberOfPosts > 0) {
