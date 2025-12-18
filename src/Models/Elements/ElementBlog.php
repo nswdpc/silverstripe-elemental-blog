@@ -1,15 +1,14 @@
 <?php
+
 namespace NSWDPC\Elemental\Models\Blog;
 
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Blog\Model\Blog;
 use SilverStripe\Blog\Model\BlogTag;
 use SilverStripe\Blog\Model\BlogPost;
-use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\ListboxField;
 use SilverStripe\ORM\DataList;
 
 /**
@@ -24,8 +23,8 @@ use SilverStripe\ORM\DataList;
  * @method \SilverStripe\Blog\Model\BlogTag Tag()
  * @mixin \NSWDPC\GridHelper\Extensions\ElementChildGridExtension
  */
-class ElementBlog extends BaseElement {
-
+class ElementBlog extends BaseElement
+{
     /**
      * @inheritdoc
      */
@@ -96,7 +95,7 @@ class ElementBlog extends BaseElement {
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(
-            function($fields): void {
+            function ($fields): void {
 
                 /** @var \SilverStripe\Forms\HTMLEditor\HTMLEditorField $editorField */
                 $editorField = $fields->fieldByName('Root.Main.HTML');
@@ -105,7 +104,8 @@ class ElementBlog extends BaseElement {
                 $fields->removeByName(['BlogID','TagID']);
                 $tags = BlogTag::get()->map('ID', 'Title');
                 $fields->addFieldsToTab(
-                    'Root.Main', [
+                    'Root.Main',
+                    [
                         DropdownField::create(
                             'BlogID',
                             _t(
@@ -155,7 +155,8 @@ class ElementBlog extends BaseElement {
      * @inheritdoc
      */
     #[\Override]
-    public function onBeforeWrite() {
+    public function onBeforeWrite()
+    {
         parent::onBeforeWrite();
         $this->NumberOfPosts = abs($this->NumberOfPosts);
     }
@@ -163,17 +164,18 @@ class ElementBlog extends BaseElement {
     /**
      * Return all Blog objects
      */
-    public function getBlogs() : DataList {
+    public function getBlogs(): DataList
+    {
         return Blog::get();
     }
 
     /**
      * Get all recent posts based on filters and limit
      */
-    public function getRecentPosts() : ?DataList
+    public function getRecentPosts(): ?DataList
     {
         $blog = $this->Blog();
-        if(!$blog || !$blog->exists()) {
+        if (!$blog || !$blog->exists()) {
             return null;
         }
 
@@ -183,7 +185,7 @@ class ElementBlog extends BaseElement {
                 'ParentID' => $blog->ID
             ]);
         $tag = $this->Tag();
-        if($tag && $tag->exists() && $tag->Title) {
+        if ($tag && $tag->exists() && $tag->Title) {
             $blogPosts = $blogPosts->filter([
                 'Tags.ID' => $tag->ID
             ]);
