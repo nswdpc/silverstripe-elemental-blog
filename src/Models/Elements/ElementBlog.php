@@ -43,7 +43,7 @@ class ElementBlog extends BaseElement
     /**
      * @inheritdoc
      */
-    private static string $description = "Display a list of Blog items";
+    private static string $class_description = "Display a list of Blog items";
 
     /**
      * @inheritdoc
