@@ -88,7 +88,7 @@ class ElementBlog extends BaseElement {
         $this->beforeUpdateCMSFields(
             function($fields) {
 
-                /** @var HTMLEditorField $editorField */
+                /** @var \SilverStripe\Forms\HTMLEditor\HTMLEditorField $editorField */
                 $editorField = $fields->fieldByName('Root.Main.HTML');
                 $editorField->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'));
 
