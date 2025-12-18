@@ -15,43 +15,51 @@ use SilverStripe\ORM\DataList;
 /**
  * ElementBlog
  * Adds an element listing matching blogpost records
+ * @property ?string $HTML
+ * @property int $NumberOfPosts
+ * @property ?string $BlogLinkTitle
+ * @property int $BlogID
+ * @property int $TagID
+ * @method \SilverStripe\Blog\Model\Blog Blog()
+ * @method \SilverStripe\Blog\Model\BlogTag Tag()
+ * @mixin \NSWDPC\GridHelper\Extensions\ElementChildGridExtension
  */
 class ElementBlog extends BaseElement {
 
     /**
      * @inheritdoc
      */
-    private static $icon = 'font-icon-thumbnails';
+    private static string $icon = 'font-icon-thumbnails';
 
     /**
      * @inheritdoc
      */
-    private static $table_name = 'ElementBlog';
+    private static string $table_name = 'ElementBlog';
 
     /**
      * @inheritdoc
      */
-    private static $title = 'Blog list';
+    private static string $title = 'Blog list';
 
     /**
      * @inheritdoc
      */
-    private static $description = "Display a list of Blog items";
+    private static string $description = "Display a list of Blog items";
 
     /**
      * @inheritdoc
      */
-    private static $singular_name = 'Blog';
+    private static string $singular_name = 'Blog';
 
     /**
      * @inheritdoc
      */
-    private static $plural_name = 'Blogs';
+    private static string $plural_name = 'Blogs';
 
     /**
      * @inheritdoc
      */
-    private static $db = [
+    private static array $db = [
         'HTML' => 'HTMLText',
         'NumberOfPosts' => 'Int',
         'BlogLinkTitle' => 'Varchar(255)'
@@ -60,14 +68,14 @@ class ElementBlog extends BaseElement {
     /**
      * @inheritdoc
      */
-    private static $defaults = [
+    private static array $defaults = [
         'NumberOfPosts' => 4
     ];
 
     /**
      * @inheritdoc
      */
-    private static $has_one = [
+    private static array $has_one = [
         'Blog' => Blog::class,
         'Tag' => BlogTag::class
     ];
@@ -75,22 +83,24 @@ class ElementBlog extends BaseElement {
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function getType()
     {
-        return _t(__CLASS__ . '.BlockType', 'Blog list');
+        return _t(self::class . '.BlockType', 'Blog list');
     }
 
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(
-            function($fields) {
+            function($fields): void {
 
                 /** @var \SilverStripe\Forms\HTMLEditor\HTMLEditorField $editorField */
                 $editorField = $fields->fieldByName('Root.Main.HTML');
-                $editorField->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'));
+                $editorField->setTitle(_t(self::class . '.ContentLabel', 'Content'));
 
                 $fields->removeByName(['BlogID','TagID']);
                 $tags = BlogTag::get()->map('ID', 'Title');
@@ -99,7 +109,7 @@ class ElementBlog extends BaseElement {
                         DropdownField::create(
                             'BlogID',
                             _t(
-                                __CLASS__ . '.HOLDER_ID',
+                                self::class . '.HOLDER_ID',
                                 'Choose a blog'
                             ),
                             $this->getBlogs()
@@ -107,7 +117,7 @@ class ElementBlog extends BaseElement {
                         TextField::create(
                             'BlogLinkTitle',
                             _t(
-                                __CLASS__ . '.LINKTITLE',
+                                self::class . '.LINKTITLE',
                                 'Title for link to view the blog selected'
                             )
                         ),
@@ -117,19 +127,19 @@ class ElementBlog extends BaseElement {
                             $tags ?? []
                         )->setEmptyString(
                             _t(
-                                __CLASS__ . '.CHOOSE_AN_OPTION',
+                                self::class . '.CHOOSE_AN_OPTION',
                                 'Choose an option'
                             )
                         ),
                         NumericField::create(
                             'NumberOfPosts',
                             _t(
-                                __CLASS__ . '.POSTS',
+                                self::class . '.POSTS',
                                 'Number of Posts'
                             )
                         )->setDescription(
                             _t(
-                                __CLASS__ . '.POSTS_DESCRIPTION',
+                                self::class . '.POSTS_DESCRIPTION',
                                 'Setting this value to zero will return all matching posts'
                             )
                         )
@@ -144,6 +154,7 @@ class ElementBlog extends BaseElement {
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function onBeforeWrite() {
         parent::onBeforeWrite();
         $this->NumberOfPosts = abs($this->NumberOfPosts);
@@ -165,6 +176,7 @@ class ElementBlog extends BaseElement {
         if(!$blog || !$blog->exists()) {
             return null;
         }
+
         $blogPosts = BlogPost::get()
             ->sort('PublishDate', 'DESC')
             ->filter([
@@ -176,9 +188,11 @@ class ElementBlog extends BaseElement {
                 'Tags.ID' => $tag->ID
             ]);
         }
+
         if ($blogPosts && $this->NumberOfPosts > 0) {
             $blogPosts = $blogPosts->limit($this->NumberOfPosts);
         }
+
         return $blogPosts;
     }
 
