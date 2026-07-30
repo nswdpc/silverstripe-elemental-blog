@@ -20,7 +20,7 @@
     "require": {
         "silverstripe/blog": "^5.0",
         "dnadesign/silverstripe-elemental": "^6",
-        "nswdpc/silverstripe-grid-helpers": "dev-ss6"
+        "nswdpc/silverstripe-grid-helpers": "^2"
     },
     "require-dev": {
         "cambis/silverstan": "^2",
